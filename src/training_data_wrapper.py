@@ -13,7 +13,6 @@ class TrainingDataWrapper():
 
 		self.cell_id_mapping = util.load_mapping(args.cell2id, 'cell lines')
 		self.gene_id_mapping = util.load_mapping(args.gene2id, 'genes')
-		self.cell_features = np.genfromtxt(args.genotype, delimiter = ',')
 		self.num_hiddens_genotype = args.genotype_hiddens
 		self.lr = args.lr
 		self.wd = args.wd
@@ -29,7 +28,13 @@ class TrainingDataWrapper():
 		self.delta = args.delta
 		self.min_dropout_layer = args.min_dropout_layer
 		self.dropout_fraction = args.dropout_fraction
+		self.act_fn = args.act_fn
 		self.load_ontology(args.onto)
+
+		self.mutations = np.genfromtxt(args.mutations, delimiter = ',')
+		self.cn_deletions = np.genfromtxt(args.cn_deletions, delimiter = ',')
+		self.cn_amplifications = np.genfromtxt(args.cn_amplifications, delimiter = ',')
+		self.cell_features = np.dstack([self.mutations, self.cn_deletions, self.cn_amplifications])
 
 
 	def prepare_train_data(self):

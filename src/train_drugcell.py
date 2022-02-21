@@ -23,7 +23,9 @@ def main():
 	parser.add_argument('-gene2id', help = 'Gene to ID mapping file', type = str)
 	parser.add_argument('-cell2id', help = 'Cell to ID mapping file', type = str)
 	parser.add_argument('-genotype_hiddens', help = 'Mapping for the number of neurons in each term in genotype parts', type = int, default = 6)
-	parser.add_argument('-genotype', help = 'Mutation information for cell lines', type = str)
+	parser.add_argument('-mutations', help = 'Mutation information for cell lines', type = str)
+	parser.add_argument('-cn_deletions', help = 'Copy number deletions for cell lines', type = str)
+	parser.add_argument('-cn_amplifications', help = 'Copy number amplifications for cell lines', type = str)
 	parser.add_argument('-optimize', help = 'Hyper-parameter optimization', type = int, default = 1)
 	parser.add_argument('-zscore_method', help='zscore method (zscore/robustz)', type=str)
 	parser.add_argument('-std', help = 'Standardization File', type = str)
@@ -31,6 +33,7 @@ def main():
 	parser.add_argument('-delta', help = 'Minimum change in loss to be considered an improvement', type = float, default = 0.1)
 	parser.add_argument('-min_dropout_layer', help = 'Start dropout from this Layer number', type = int, default = 3)
 	parser.add_argument('-dropout_fraction', help = 'Dropout Fraction', type = float, default = 0.3)
+	parser.add_argument('-act_fn', help = 'Activation function', type = str, default = 'none')
 
 	opt = parser.parse_args()
 

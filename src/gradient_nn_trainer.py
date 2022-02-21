@@ -83,9 +83,6 @@ class GradientNNTrainer(NNTrainer):
 
 			gradnorms = sum(_gradnorms).unsqueeze(0).cpu().numpy()[0] # Save total gradnorm for epoch
 			train_corr = util.pearson_corr(train_predict, train_label_gpu)
-			# train_corr = util.get_drug_corr_median(train_predict, train_label_gpu, train_feature)
-			# train_corr = util.class_accuracy(train_predict, train_label_gpu)
-			# train_r2 = util.get_r2_score(train_label_gpu, train_predict)
 
 			self.model.eval()
 
@@ -115,9 +112,6 @@ class GradientNNTrainer(NNTrainer):
 						val_loss += self.data_wrapper.alpha * loss(output, cuda_labels)
 
 			val_corr = util.pearson_corr(val_predict, val_label_gpu)
-			# val_corr = util.get_drug_corr_median(val_predict, val_label_gpu, val_feature)
-			# val_corr = util.class_accuracy(val_predict, val_label_gpu)
-			# val_r2 = util.get_r2_score(val_label_gpu, val_predict)
 
 			epoch_end_time = time.time()
 			true_auc = torch.mean(train_label_gpu)

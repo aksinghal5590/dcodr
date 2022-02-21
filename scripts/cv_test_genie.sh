@@ -7,7 +7,7 @@ cell2idfile="${homedir}/data/GENIE/GENIE_all_cell2ind.txt"
 mutationfile="${homedir}/data/GENIE/GENIE_cell2mutation_${3}.txt"
 testdatafile="${homedir}/data/GENIE/GENIE_test_av_${4}.txt"
 
-modeldir="${homedir}/models_2/model_${2}_${3}_${4}_${5}_${6}"
+modeldir="${homedir}/models/model_${2}_${3}_${4}_${5}_${6}"
 modelfile="${modeldir}/model_final.pt"
 
 stdfile="${modeldir}/std.txt"

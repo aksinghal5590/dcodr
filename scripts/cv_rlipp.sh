@@ -7,7 +7,7 @@ cell_index="${homedir}/data/training_files_av/cell2ind_${3}.txt"
 cell_mutation="${homedir}/data/training_files_av/cell2mutation_${2}_${3}.txt"
 test="${homedir}/data/training_files_av/${6}_test_sr_${3}_${4}.txt"
 
-modeldir="${homedir}/models_2/model_${2}_${3}_${4}_${5}_${6}"
+modeldir="${homedir}/models/model_${2}_${3}_${4}_${5}_${6}"
 
 predicted="${modeldir}/predict.txt"
 output="${modeldir}/rlipp.out"

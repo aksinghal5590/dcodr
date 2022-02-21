@@ -1,6 +1,6 @@
 #!/bin/bash
 
-homedir="/cellar/users/asinghal/Workspace/nest_drugcell"
+homedir="/cellar/users/asinghal/Workspace/dcodr"
 
 dataset="av"
 zscore_method="auc"
@@ -10,12 +10,12 @@ drugs=`awk '{ print $1 }' "${homedir}/data/training_files_av/drugname_${dataset}
 
 for ont in ctg
 do
-    for drug in "Palbociclib"
+    for drug in "Palbociclib" "Trametinib"
 	do
 		for ((i=1;i<=folds;i++));
 		do
-			sbatch -J "NDC_${drug}_${i}" -o "${homedir}/logs/out_${ont}_${drug}_${i}.log" ${homedir}/scripts/cv_batch.sh $homedir $ont $dataset $drug ${zscore_method} $i
-			sbatch -J "NDC_${drug}_${i}" -o "${homedir}/logs/rlipp_${drug}_${i}.log" ${homedir}/scripts/cv_rlipp_slurm.sh $homedir $ont $dataset $drug ${zscore_method} $i
+			sbatch -J "DCoDR_${drug}_${i}" -o "${homedir}/logs/out_${ont}_${drug}_${i}.log" ${homedir}/scripts/cv_batch.sh $homedir $ont $dataset $drug ${zscore_method} $i
+			#sbatch -J "DCoDR_${drug}_${i}" -o "${homedir}/logs/rlipp_${drug}_${i}.log" ${homedir}/scripts/cv_rlipp_slurm.sh $homedir $ont $dataset $drug ${zscore_method} $i
 		done
 	done
 done

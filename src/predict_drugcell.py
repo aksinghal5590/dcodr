@@ -63,10 +63,10 @@ def predict_drugcell(predict_data, gene_dim, model_file, hidden_folder, batch_si
 		aux_out_map['final'].backward(torch.ones_like(aux_out_map['final']))
 
 		# Save Feature Grads
-		feature_grad = torch.zeros(0,0).cuda(CUDA_ID)
-		feature_grad = cuda_features.grad.data
-		with open(result_file + '_feature_grad.txt', 'ab') as f:
-			np.savetxt(f, feature_grad.cpu().numpy(), '%.4e', delimiter='\t')
+		#feature_grad = torch.zeros(0,0).cuda(CUDA_ID)
+		#feature_grad = cuda_features.grad.data
+		#with open(result_file + '_feature_grad.txt', 'ab') as f:
+		#	np.savetxt(f, feature_grad.cpu().numpy(), '%.4e', delimiter='\t')
 
 		# Save Hidden Grads
 		for term, hidden_grad in saved_grads.items():
@@ -75,9 +75,6 @@ def predict_drugcell(predict_data, gene_dim, model_file, hidden_folder, batch_si
 				np.savetxt(f, hidden_grad.data.cpu().numpy(), '%.4e', delimiter='\t')
 
 	test_corr = util.pearson_corr(test_predict, predict_label_gpu)
-	#test_corr = util.get_drug_corr_median(test_predict, predict_label_gpu, predict_feature)
-	# test_corr = util.class_accuracy(test_predict, predict_label_gpu)
-	# test_corr = util.spearman_corr(test_predict, predict_label_gpu)
 	print("Test correlation\t%s\t%.4f" % (model.root, test_corr))
 
 	np.savetxt(result_file + '.txt', test_predict.cpu().numpy(),'%.4e')
@@ -92,7 +89,9 @@ parser.add_argument('-load', help='Model file', type=str)
 parser.add_argument('-hidden', help='Hidden output folder', type=str, default='hidden/')
 parser.add_argument('-result', help='Result file prefix', type=str, default='result/predict')
 parser.add_argument('-cuda', help='Specify GPU', type=int, default=0)
-parser.add_argument('-genotype', help='Mutation information for cell lines', type=str)
+parser.add_argument('-mutations', help = 'Mutation information for cell lines', type = str)
+parser.add_argument('-cn_deletions', help = 'Copy number deletions for cell lines', type = str)
+parser.add_argument('-cn_amplifications', help = 'Copy number amplifications for cell lines', type = str)
 parser.add_argument('-zscore_method', help='zscore method (zscore/robustz)', type=str)
 parser.add_argument('-std', help = 'Standardization File', type = str)
 
@@ -103,7 +102,10 @@ predict_data, cell2id_mapping = util.prepare_predict_data(opt.predict, opt.cell2
 gene2id_mapping = util.load_mapping(opt.gene2id, "genes")
 
 # load cell/drug features
-cell_features = np.genfromtxt(opt.genotype, delimiter=',')
+mutations = np.genfromtxt(opt.mutations, delimiter = ',')
+cn_deletions = np.genfromtxt(opt.cn_deletions, delimiter = ',')
+cn_amplifications = np.genfromtxt(opt.cn_amplifications, delimiter = ',')
+cell_features = np.dstack([mutations, cn_deletions, cn_amplifications])
 
 num_cells = len(cell2id_mapping)
 num_genes = len(gene2id_mapping)

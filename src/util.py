@@ -184,8 +184,9 @@ def load_mapping(mapping_file, mapping_type):
 
 
 def build_input_vector(input_data, cell_features):
-	genedim = len(cell_features[0,:])
-	feature = np.zeros((input_data.size()[0], (genedim)))
+	genedim = len(cell_features[0, :])
+	featdim = len(cell_features[0, 0, :])
+	feature = np.zeros((input_data.size()[0], genedim, featdim))
 
 	for i in range(input_data.size()[0]):
 		feature[i] = cell_features[int(input_data[i,0])]

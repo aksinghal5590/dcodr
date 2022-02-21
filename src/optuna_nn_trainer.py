@@ -33,13 +33,15 @@ class OptunaNNTrainer():
 
 		self.data_wrapper.genotype_hiddens = trial.suggest_categorical("genotype_hiddens", [2, 4, 6])
 		self.data_wrapper.lr = trial.suggest_float("lr", 1e-4, 1e-3, log=True)
-		self.data_wrapper.min_dropout_layer = trial.suggest_categorical("min_dropout_layer", [2, 3, 4])
+		self.data_wrapper.min_dropout_layer = trial.suggest_categorical("min_dropout_layer", [2])
 
 		batch_size = self.data_wrapper.batchsize
 		if batch_size > len(self.train_feature)/4:
 			batch_size = int(math.log(len(self.train_feature)/4, 2))
 			self.data_wrapper.batchsize = trial.suggest_categorical("batchsize", [batch_size])
-		self.data_wrapper.dropout_fraction = trial.suggest_categorical("dropout_fraction", [0.3, 0.5])
+		self.data_wrapper.dropout_fraction = trial.suggest_categorical("dropout_fraction", [0.3])
+
+		self.data_wrapper.act_fn = trial.suggest_categorical("act_fn", ['tanh', 'relu', 'sigmoid', 'none'])
 
 		for key, value in trial.params.items():
 			print("{}: {}".format(key, value))
@@ -114,8 +116,6 @@ class OptunaNNTrainer():
 				optimizer.step()
 
 			train_corr = util.pearson_corr(train_predict, train_label_gpu)
-			# train_corr = util.get_drug_corr_median(train_predict, train_label_gpu, train_feature)
-			# train_corr = util.get_r2_score(train_label_gpu, train_predict)
 
 			self.model.eval()
 
@@ -145,8 +145,6 @@ class OptunaNNTrainer():
 						val_loss += self.data_wrapper.alpha * loss(output, cuda_labels)
 
 			val_corr = util.pearson_corr(val_predict, val_label_gpu)
-			# val_corr = util.get_drug_corr_median(val_predict, val_label_gpu, val_feature)
-			# val_corr = util.get_r2_score(val_label_gpu, val_predict)
 
 			epoch_end_time = time.time()
 			true_auc = torch.mean(train_label_gpu)

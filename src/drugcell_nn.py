@@ -27,8 +27,14 @@ class DrugCellNN(nn.Module):
 		# calculate the number of values in a state (term): term_size_map is the number of all genes annotated with the term
 		self.cal_term_dim(data_wrapper.term_size_map)
 
+		self.gene_id_mapping = data_wrapper.gene_id_mapping
 		# ngenes, gene_dim are the number of all genes
-		self.gene_dim = len(data_wrapper.gene_id_mapping)
+		self.gene_dim = len(self.gene_id_mapping)
+
+		# No of input features per gene
+		self.feature_dim = len(data_wrapper.cell_features[0, 0, :])
+
+		self.act_fn = data_wrapper.act_fn
 
 		# add modules for neural networks to process genotypes
 		self.contruct_direct_gene_layer()
@@ -37,7 +43,6 @@ class DrugCellNN(nn.Module):
 		# add module for final layer
 		self.add_module('final_aux_linear_layer', nn.Linear(data_wrapper.num_hiddens_genotype, 1))
 		self.add_module('final_linear_layer_output', nn.Linear(1, 1))
-		#self.add_module('final_linear_layer_output', nn.Linear(data_wrapper.num_hiddens_final, data_wrapper.n_classes))
 
 
 	# calculate the number of values in a state (term)
@@ -55,6 +60,9 @@ class DrugCellNN(nn.Module):
 
 	# build a layer for forwarding gene that are directly annotated with the term
 	def contruct_direct_gene_layer(self):
+
+		for gene,_ in self.gene_id_mapping.items():
+			self.add_module(gene + '_feature_layer', nn.Linear(self.feature_dim, 1))
 
 		for term, gene_set in self.term_direct_gene_map.items():
 			if len(gene_set) == 0:
@@ -114,11 +122,21 @@ class DrugCellNN(nn.Module):
 
 	# definition of forward function
 	def forward(self, x):
-		gene_input = x.narrow(1, 0, self.gene_dim)
 
-		# define forward function for genotype arm #############################################
+		feat_out_list = []
+		for gene, i in self.gene_id_mapping.items():
+			if self.act_fn == 'tanh':
+				feat_out = torch.tanh(self._modules[gene + '_feature_layer'](x[:, i, :]))
+			elif self.act_fn == 'relu':
+				feat_out = torch.relu(self._modules[gene + '_feature_layer'](x[:, i, :]))
+			elif self.act_fn == 'sigmoid':
+				feat_out = torch.sigmoid(self._modules[gene + '_feature_layer'](x[:, i, :]))
+			else:
+				feat_out = self._modules[gene + '_feature_layer'](x[:, i, :])
+			feat_out_list.append(feat_out)
+		
+		gene_input = torch.cat(feat_out_list, dim=1)
 		term_gene_out_map = {}
-
 		for term, _ in self.term_direct_gene_map.items():
 			term_gene_out_map[term] = self._modules[term + '_direct_gene_layer'](gene_input)
 
