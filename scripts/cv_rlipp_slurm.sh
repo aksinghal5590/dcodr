@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=NeST_DrugCell_RLIPP
+#SBATCH --job-name=DCoDR_RLIPP
 #SBATCH --output=cpu_out.log
 #SBATCH --partition=nrnb-compute
 #SBATCH --account=nrnb

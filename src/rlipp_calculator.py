@@ -1,11 +1,12 @@
-from scipy import stats
-from sklearn.linear_model import RidgeCV
+import os
 import numpy as np
 import pandas as pd
 import time
+from scipy import stats
 from multiprocessing import Pool
 from joblib import Parallel, delayed
-import os
+from sklearn.decomposition import PCA
+from sklearn.linear_model import RidgeCV
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -129,9 +130,13 @@ class RLIPPCalculator():
 	#Executes 5-fold cross validated Ridge regression for a given hidden features matrix
 	#and returns the spearman correlation value of the predicted output
 	def exec_lm(self, X, y):
+
+		pca = PCA(n_components=self.num_hiddens_genotype)
+		X_pca = pca.fit_transform(X)
+
 		regr = RidgeCV(cv=5)
-		regr.fit(X, y)
-		y_pred = regr.predict(X)
+		regr.fit(X_pca, y)
+		y_pred = regr.predict(X_pred)
 		return stats.spearmanr(y_pred, y)[0]
 
 
