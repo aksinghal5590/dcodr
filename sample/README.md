@@ -54,7 +54,7 @@ Required input files:
     * _cell2amplification.txt_: a comma-delimited file where each row has 718 binary values
          indicating copy number amplification (1) (0 for not).
 
-2. Test data file: _test_data.txt_
+2. Test data file: _test.txt_
     * A tab-delimited file containing all data points that you want to estimate drug response for.
     The 1st column is identification of cells (genotypes) and the 2nd column is identification of
     drugs.
@@ -74,7 +74,7 @@ _sample_ folder)
                         -genotype cell2mutation.txt
                         -cn_deletions cell2cndeletion.txt
                         -cn_amplifications cell2amplification.txt
-                        -predict test_data.txt
+                        -predict testdata.txt
                         -hidden <path_to_directory_to_store_hidden_values>
                         -result <path_to_directory_to_store_prediction_results>
                         -load <path_to_model_file>
@@ -103,7 +103,7 @@ to run the training scripts:
     * _cell2amplification.txt_: a comma-delimited file where each row has 718 binary values
          indicating copy number amplification (1) (0 for not).
 
-2. Training data file: _training_data.txt_
+2. Training data file: _train.txt_
     * A tab-delimited file containing all data points that you want to use to train the model.
     The 1st column is identification of cells (genotypes), the 2nd column is a placeholder 
     for drug id and the 3rd column is an observed drug response in a floating point number.
@@ -165,7 +165,7 @@ python -u train.py  -onto ontology.txt
                     -cn_deletions cell2cndeletion.txt
                     -cn_amplifications cell2amplification.txt
                     -train train.txt
-                    -modeldir sample/model
+                    -modeldir ./MODEL
                     -genotype_hiddens 6
                     -epoch 100
                     -batchsize 64

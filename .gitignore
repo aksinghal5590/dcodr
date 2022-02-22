@@ -9,6 +9,7 @@ src/__pycache__/
 .pydevproject
 .vscode/
 */.ipynb_checkpoints/
+.ipynb_checkpoints/
 rlipp/
 src/copied_notebooks/
 temp/

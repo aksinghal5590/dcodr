@@ -63,10 +63,11 @@ def predict_drugcell(predict_data, gene_dim, model_file, hidden_folder, batch_si
 		aux_out_map['final'].backward(torch.ones_like(aux_out_map['final']))
 
 		# Save Feature Grads
-		#feature_grad = torch.zeros(0,0).cuda(CUDA_ID)
-		#feature_grad = cuda_features.grad.data
-		#with open(result_file + '_feature_grad.txt', 'ab') as f:
-		#	np.savetxt(f, feature_grad.cpu().numpy(), '%.4e', delimiter='\t')
+		feature_grad = torch.zeros(0,0).cuda(CUDA_ID)
+		for i in range(len(cuda_features[0, 0, :])):
+			feature_grad = cuda_features.grad.data[:, :, i]
+			with open(result_file + '_feature_grad_' + str(i) + '.txt', 'ab') as f:
+				np.savetxt(f, feature_grad.cpu().numpy(), '%.4e', delimiter='\t')
 
 		# Save Hidden Grads
 		for term, hidden_grad in saved_grads.items():

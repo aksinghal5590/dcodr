@@ -1,13 +1,13 @@
 #!/bin/bash
-homedir=$1
-zscore_method=$5
 
-gene2idfile="${homedir}/data/gene2ind_${2}_${3}.txt"
-cell2idfile="${homedir}/data/cell2ind_${3}.txt"
-mutationfile="${homedir}/data/cell2mutation_${2}_${3}.txt"
-testdatafile="${homedir}/data/training_files/test_${3}_${4}.txt"
+homedir="your_home_directory"
 
-modeldir="${homedir}/models/model_${3}_${4}_${5}"
+gene2idfile="${homedir}/sample/gene2ind.txt"
+cell2idfile="${homedir}/sample/cell2ind.txt"
+mutationfile="${homedir}/sample/cell2mutation.txt"
+testdatafile="${homedir}/sample/test_data.txt"
+
+modeldir="${homedir}/sample/model"
 modelfile="${modeldir}/model_final.pt"
 
 stdfile="${modeldir}/std.txt"
@@ -21,9 +21,11 @@ then
 fi
 mkdir -p $hiddendir
 
+zscore_method="auc"
+
 cudaid=0
 
-pyScript="${homedir}/src/predict_drugcell.py"
+pyScript="${homedir}/src/predict.py"
 
 source activate cuda11_env
 

@@ -52,7 +52,7 @@ def qcplots(filedir):
 			trialparams = 'TRIAL_' + str(trialcounter) + '\n' + (',').join(trialdict[trialcounter][0])
 			data = trialdict[trialcounter][1]
 			# Make Figure
-			# ax[0].text(0, 0, trialparams)
+			ax[0].text(0, 0, trialparams)
 			ax[0].axis('off')
 			ax[1].plot(data.train_corr, label='Train Corr')
 			ax[1].plot(data.val_corr, label='Val Corr')

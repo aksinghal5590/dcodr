@@ -1,14 +1,14 @@
 #!/bin/bash
-homedir=$1
-zscore_method=$5
 
-gene2idfile="${homedir}/data/training_files_av/gene2ind_${2}_${3}.txt"
-cell2idfile="${homedir}/data/training_files_av/cell2ind_${3}.txt"
-ontfile="${homedir}/data/training_files_av/ontology_${2}_${3}.txt"
-mutationfile="${homedir}/data/training_files_av/cell2mutation_${2}_${3}.txt"
-traindatafile="${homedir}/data/training_files_av/train_${3}_${4}.txt"
+homedir="your_home_directory"
 
-modeldir="${homedir}/models_2/model_${2}_${3}_${4}_${5}"
+gene2idfile="${homedir}/sample/gene2ind.txt"
+cell2idfile="${homedir}/sample/cell2ind.txt"
+ontfile="${homedir}/sample/ontology.txt"
+mutationfile="${homedir}/sample/cell2mutation.txt"
+traindatafile="${homedir}/sample/training_data.txt"
+
+modeldir="${homedir}/sample/model"
 if [ -d $modeldir ]
 then
 	rm -rf $modeldir
@@ -18,9 +18,11 @@ mkdir -p $modeldir
 stdfile="${modeldir}/std.txt"
 resultfile="${modeldir}/predict"
 
+zscore_method="auc"
+
 cudaid=0
 
-pyScript="${homedir}/src/train_drugcell.py"
+pyScript="${homedir}/src/train.py"
 
 source activate cuda11_env
 

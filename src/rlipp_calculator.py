@@ -17,15 +17,19 @@ class RLIPPCalculator():
 
 	def __init__(self, args):
 		self.ontology = pd.read_csv(args.ontology, sep='\t', header=None, names=['S', 'T', 'I'], dtype={0:str, 1:str, 2:str})
+		self.terms = self.ontology['S'].unique().tolist()
 		self.test_df = pd.read_csv(args.test, sep='\t', header=None, names=['C', 'D', 'AUC', 'DS'])
 		self.predicted_vals = np.loadtxt(args.predicted)
-		self.genes = pd.read_csv(args.gene_index, sep='\t', header=None, names=['I', 'G'])['G']
-		self.cell_index = pd.read_csv(args.cell_index, sep="\t", header=None, names=['I', 'C'])
-		self.cell_mutation = np.loadtxt(args.cell_mutation, delimiter=',')
+		self.genes = pd.read_csv(args.gene2idfile, sep='\t', header=None, names=['I', 'G'])['G']
+		self.cell_index = pd.read_csv(args.cell2idfile, sep="\t", header=None, names=['I', 'C'])
 		self.out_file = args.output
 		self.cpu_count = args.cpu_count
 		self.num_hiddens_genotype = args.genotype_hiddens
-		self.terms = self.ontology['S'].unique().tolist()
+
+		self.mutations = np.genfromtxt(args.mutations, delimiter = ',')
+		self.cn_deletions = np.genfromtxt(args.cn_deletions, delimiter = ',')
+		self.cn_amplifications = np.genfromtxt(args.cn_amplifications, delimiter = ',')
+		self.cell_features = np.dstack([self.mutations, self.cn_deletions, self.cn_amplifications])
 
 		self.hidden_dir = args.hidden
 		if not self.hidden_dir.endswith('/'):
@@ -45,8 +49,8 @@ class RLIPPCalculator():
 		cell_line_ids = np.array([cell_id_map[x] for x in self.test_df['C'].tolist()])
 		for i, gene in enumerate(self.genes):
 			file_name = self.hidden_dir + gene + '.hidden'
-			mat_data_sub = self.cell_mutation[cell_line_ids, i].ravel()
-			np.savetxt(file_name, mat_data_sub, fmt='%.3f')
+			gene_hiddens = cell_features[cell_line_ids, i]
+			np.savetxt(file_name, gene_hiddens, fmt='%.3f')
 
 
 	#Create a map of a list of the position of a drug in the test file
@@ -81,7 +85,7 @@ class RLIPPCalculator():
 
 
 	def load_gene_features(self, gene):
-		return self.load_feature(gene, 1)
+		return self.load_feature(gene, 3)
 
 
 	def create_child_feature_map(self, feature_map, term):
