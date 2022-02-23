@@ -33,7 +33,6 @@ def main():
 	parser.add_argument('-delta', help = 'Minimum change in loss to be considered an improvement', type = float, default = 0.1)
 	parser.add_argument('-min_dropout_layer', help = 'Start dropout from this Layer number', type = int, default = 3)
 	parser.add_argument('-dropout_fraction', help = 'Dropout Fraction', type = float, default = 0.3)
-	parser.add_argument('-act_fn', help = 'Activation function', type = str, default = 'none')
 
 	opt = parser.parse_args()
 

@@ -28,7 +28,6 @@ class TrainingDataWrapper():
 		self.delta = args.delta
 		self.min_dropout_layer = args.min_dropout_layer
 		self.dropout_fraction = args.dropout_fraction
-		self.act_fn = args.act_fn
 		self.load_ontology(args.onto)
 
 		self.mutations = np.genfromtxt(args.mutations, delimiter = ',')

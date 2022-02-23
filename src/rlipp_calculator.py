@@ -50,7 +50,7 @@ class RLIPPCalculator():
 		cell_line_ids = np.array([cell_id_map[x] for x in self.test_df['C'].tolist()])
 		for i, gene in enumerate(self.genes):
 			file_name = self.hidden_dir + gene + '.hidden'
-			gene_hiddens = cell_features[cell_line_ids, i]
+			gene_hiddens = self.cell_features[cell_line_ids, i]
 			np.savetxt(file_name, gene_hiddens, fmt='%.3f')
 
 
@@ -136,7 +136,7 @@ class RLIPPCalculator():
 
 		regr = RidgeCV(cv=5)
 		regr.fit(X_pca, y)
-		y_pred = regr.predict(X_pred)
+		y_pred = regr.predict(X_pca)
 		return stats.spearmanr(y_pred, y)[0]
 
 

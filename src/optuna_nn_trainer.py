@@ -25,7 +25,7 @@ class OptunaNNTrainer():
 
 	def exec_study(self):
 		study = optuna.create_study(direction="maximize")
-		study.optimize(self.train_model, n_trials=100)
+		study.optimize(self.train_model, n_trials=30)
 		return self.print_result(study)
 
 
@@ -40,8 +40,6 @@ class OptunaNNTrainer():
 			batch_size = int(math.log(len(self.train_feature)/4, 2))
 			self.data_wrapper.batchsize = trial.suggest_categorical("batchsize", [batch_size])
 		self.data_wrapper.dropout_fraction = trial.suggest_categorical("dropout_fraction", [0.3])
-
-		self.data_wrapper.act_fn = trial.suggest_categorical("act_fn", ['tanh', 'relu', 'sigmoid', 'none'])
 
 		for key, value in trial.params.items():
 			print("{}: {}".format(key, value))

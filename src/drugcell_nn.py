@@ -34,8 +34,6 @@ class DrugCellNN(nn.Module):
 		# No of input features per gene
 		self.feature_dim = len(data_wrapper.cell_features[0, 0, :])
 
-		self.act_fn = data_wrapper.act_fn
-
 		# add modules for neural networks to process genotypes
 		self.contruct_direct_gene_layer()
 		self.construct_NN_graph(copy.deepcopy(data_wrapper.dG))
@@ -125,14 +123,7 @@ class DrugCellNN(nn.Module):
 
 		feat_out_list = []
 		for gene, i in self.gene_id_mapping.items():
-			if self.act_fn == 'tanh':
-				feat_out = torch.tanh(self._modules[gene + '_feature_layer'](x[:, i, :]))
-			elif self.act_fn == 'relu':
-				feat_out = torch.relu(self._modules[gene + '_feature_layer'](x[:, i, :]))
-			elif self.act_fn == 'sigmoid':
-				feat_out = torch.sigmoid(self._modules[gene + '_feature_layer'](x[:, i, :]))
-			else:
-				feat_out = self._modules[gene + '_feature_layer'](x[:, i, :])
+			feat_out = torch.tanh(self._modules[gene + '_feature_layer'](x[:, i, :]))
 			feat_out_list.append(feat_out)
 		
 		gene_input = torch.cat(feat_out_list, dim=1)
