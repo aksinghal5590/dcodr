@@ -61,7 +61,7 @@ class DrugCellNN(nn.Module):
 
 		for gene,_ in self.gene_id_mapping.items():
 			self.add_module(gene + '_feature_layer', nn.Linear(self.feature_dim, 1))
-			self.add_module(gene + '_batchnorm_layer', nn.BatchNorm1d(self.feature_dim))
+			self.add_module(gene + '_batchnorm_layer', nn.BatchNorm1d(1))
 
 		for term, gene_set in self.term_direct_gene_map.items():
 			if len(gene_set) == 0:
