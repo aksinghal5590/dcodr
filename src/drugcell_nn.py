@@ -61,6 +61,7 @@ class DrugCellNN(nn.Module):
 
 		for gene,_ in self.gene_id_mapping.items():
 			self.add_module(gene + '_feature_layer', nn.Linear(self.feature_dim, 1))
+			self.add_module(gene + '_batchnorm_layer', nn.BatchNorm1d(self.feature_dim))
 
 		for term, gene_set in self.term_direct_gene_map.items():
 			if len(gene_set) == 0:
@@ -121,27 +122,27 @@ class DrugCellNN(nn.Module):
 	# definition of forward function
 	def forward(self, x):
 
+		hidden_embeddings_map = {}
+		aux_out_map = {}
+
 		feat_out_list = []
 		for gene, i in self.gene_id_mapping.items():
 			feat_out = torch.tanh(self._modules[gene + '_feature_layer'](x[:, i, :]))
-			feat_out_list.append(feat_out)
+			hidden_embeddings_map[gene] = self._modules[gene + '_batchnorm_layer'](feat_out)
+			feat_out_list.append(hidden_embeddings_map[gene])
 		
 		gene_input = torch.cat(feat_out_list, dim=1)
 		term_gene_out_map = {}
 		for term, _ in self.term_direct_gene_map.items():
 			term_gene_out_map[term] = self._modules[term + '_direct_gene_layer'](gene_input)
 
-		term_NN_out_map = {}
-		aux_out_map = {}
-
 		for i, layer in enumerate(self.term_layer_list):
 
 			for term in layer:
 
 				child_input_list = []
-
 				for child in self.term_neighbor_map[term]:
-					child_input_list.append(term_NN_out_map[child])
+					child_input_list.append(hidden_embeddings_map[child])
 
 				if term in self.term_direct_gene_map:
 					child_input_list.append(term_gene_out_map[term])
@@ -153,15 +154,15 @@ class DrugCellNN(nn.Module):
 				else:
 					term_NN_out = self._modules[term+'_linear_layer'](child_input)
 				Tanh_out = torch.tanh(term_NN_out)
-				term_NN_out_map[term] = self._modules[term+'_batchnorm_layer'](Tanh_out)
-				aux_layer1_out = torch.tanh(self._modules[term+'_aux_linear_layer1'](term_NN_out_map[term]))
+				hidden_embeddings_map[term] = self._modules[term+'_batchnorm_layer'](Tanh_out)
+				aux_layer1_out = torch.tanh(self._modules[term+'_aux_linear_layer1'](hidden_embeddings_map[term]))
 				aux_out_map[term] = self._modules[term+'_aux_linear_layer2'](aux_layer1_out)
 
-		final_input = term_NN_out_map[self.root]
+		final_input = hidden_embeddings_map[self.root]
 		aux_layer_out = torch.tanh(self._modules['final_aux_linear_layer'](final_input))
 		aux_out_map['final'] = self._modules['final_linear_layer_output'](aux_layer_out)
 
-		return aux_out_map, term_NN_out_map
+		return aux_out_map, hidden_embeddings_map
 
 
 	# Unused and not working as expected

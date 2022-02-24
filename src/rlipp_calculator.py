@@ -26,11 +26,7 @@ class RLIPPCalculator():
 		self.out_file = args.output
 		self.cpu_count = args.cpu_count
 		self.num_hiddens_genotype = args.genotype_hiddens
-
-		self.mutations = np.genfromtxt(args.mutations, delimiter = ',')
-		self.cn_deletions = np.genfromtxt(args.cn_deletions, delimiter = ',')
-		self.cn_amplifications = np.genfromtxt(args.cn_amplifications, delimiter = ',')
-		self.cell_features = np.dstack([self.mutations, self.cn_deletions, self.cn_amplifications])
+		self.feature_count = args.feature_count
 
 		self.hidden_dir = args.hidden
 		if not self.hidden_dir.endswith('/'):
@@ -41,16 +37,22 @@ class RLIPPCalculator():
 		if self.drug_count == 0:
 			self.drug_count = len(self.drugs)
 
-		self.create_gene_hidden_files()
+		# Not needed if multiple features
+		# self.create_gene_hidden_files(args)
 
 
 	# Create hidden files for all genes which are just their mutation values
-	def create_gene_hidden_files(self):
+	def create_gene_hidden_files(self, args):
+		mutations = np.genfromtxt(args.mutations, delimiter = ',')
+		cn_deletions = np.genfromtxt(args.cn_deletions, delimiter = ',')
+		cn_amplifications = np.genfromtxt(args.cn_amplifications, delimiter = ',')
+		cell_features = np.dstack([mutations, cn_deletions, cn_amplifications])
+
 		cell_id_map = dict(zip(self.cell_index['C'], self.cell_index['I']))
 		cell_line_ids = np.array([cell_id_map[x] for x in self.test_df['C'].tolist()])
 		for i, gene in enumerate(self.genes):
 			file_name = self.hidden_dir + gene + '.hidden'
-			gene_hiddens = self.cell_features[cell_line_ids, i]
+			gene_hiddens = cell_features[cell_line_ids, i]
 			np.savetxt(file_name, gene_hiddens, fmt='%.3f')
 
 
@@ -75,9 +77,9 @@ class RLIPPCalculator():
 		return {drug:corr for drug,corr in sorted(drug_corr_map.items(), key=lambda item:item[1], reverse=True)}
 
 
-	#Load the hidden file for a given term
-	def load_feature(self, term, size):
-		file_name = self.hidden_dir + term + '.hidden'
+	#Load the hidden file for a given element
+	def load_feature(self, element, size):
+		file_name = self.hidden_dir + element + '.hidden'
 		return np.loadtxt(file_name, usecols=range(size))
 
 
@@ -86,7 +88,7 @@ class RLIPPCalculator():
 
 
 	def load_gene_features(self, gene):
-		return self.load_feature(gene, 3)
+		return self.load_feature(gene, self.feature_count)
 
 
 	def create_child_feature_map(self, feature_map, term):

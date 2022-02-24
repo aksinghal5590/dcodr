@@ -25,7 +25,7 @@ class OptunaNNTrainer():
 
 	def exec_study(self):
 		study = optuna.create_study(direction="maximize")
-		study.optimize(self.train_model, n_trials=30)
+		study.optimize(self.train_model, n_trials=25)
 		return self.print_result(study)
 
 
@@ -33,13 +33,11 @@ class OptunaNNTrainer():
 
 		self.data_wrapper.genotype_hiddens = trial.suggest_categorical("genotype_hiddens", [2, 4, 6])
 		self.data_wrapper.lr = trial.suggest_float("lr", 1e-4, 1e-3, log=True)
-		self.data_wrapper.min_dropout_layer = trial.suggest_categorical("min_dropout_layer", [2])
 
 		batch_size = self.data_wrapper.batchsize
 		if batch_size > len(self.train_feature)/4:
 			batch_size = int(math.log(len(self.train_feature)/4, 2))
 			self.data_wrapper.batchsize = trial.suggest_categorical("batchsize", [batch_size])
-		self.data_wrapper.dropout_fraction = trial.suggest_categorical("dropout_fraction", [0.3])
 
 		for key, value in trial.params.items():
 			print("{}: {}".format(key, value))

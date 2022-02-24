@@ -29,12 +29,12 @@ def predict_drugcell(predict_data, gene_dim, model_file, hidden_folder, batch_si
 
 	#Test
 	test_predict = torch.zeros(0,0).cuda(CUDA_ID)
-	term_hidden_map = {}
+	hidden_embeddings_map = {}
 
 	saved_grads = {}
-	def save_grad(term):
+	def save_grad(element):
 		def savegrad_hook(grad):
-			saved_grads[term] = grad
+			saved_grads[element] = grad
 		return savegrad_hook
 
 	for i, (inputdata, labels) in enumerate(test_loader):
@@ -44,20 +44,20 @@ def predict_drugcell(predict_data, gene_dim, model_file, hidden_folder, batch_si
 		cuda_features = Variable(features.cuda(CUDA_ID), requires_grad=True)
 
 		# make prediction for test data
-		aux_out_map, term_hidden_map = model(cuda_features)
+		aux_out_map, hidden_embeddings_map = model(cuda_features)
 
 		if test_predict.size()[0] == 0:
 			test_predict = aux_out_map['final'].data
 		else:
 			test_predict = torch.cat([test_predict, aux_out_map['final'].data], dim=0)
 
-		for term, hidden_map in term_hidden_map.items():
-			hidden_file = hidden_folder+'/'+term+'.hidden'
+		for element, hidden_map in hidden_embeddings_map.items():
+			hidden_file = hidden_folder + '/' + element + '.hidden'
 			with open(hidden_file, 'ab') as f:
 				np.savetxt(f, hidden_map.data.cpu().numpy(), '%.4e')
 
-		for term, _ in term_hidden_map.items():
-			term_hidden_map[term].register_hook(save_grad(term))
+		for element, _ in hidden_embeddings_map.items():
+			hidden_embeddings_map[element].register_hook(save_grad(element))
 
 		## Do backprop
 		aux_out_map['final'].backward(torch.ones_like(aux_out_map['final']))
@@ -70,8 +70,8 @@ def predict_drugcell(predict_data, gene_dim, model_file, hidden_folder, batch_si
 				np.savetxt(f, feature_grad.cpu().numpy(), '%.4e', delimiter='\t')
 
 		# Save Hidden Grads
-		for term, hidden_grad in saved_grads.items():
-			hidden_file = hidden_folder + '/' + term + '.hidden_grad'
+		for element, hidden_grad in saved_grads.items():
+			hidden_file = hidden_folder + '/' + element + '.hidden_grad'
 			with open(hidden_file, 'ab') as f:
 				np.savetxt(f, hidden_grad.data.cpu().numpy(), '%.4e', delimiter='\t')
 
