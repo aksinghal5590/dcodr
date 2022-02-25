@@ -22,7 +22,7 @@ def main():
 	parser.add_argument('-cuda', help = 'Specify GPU', type = int, default = 0)
 	parser.add_argument('-gene2id', help = 'Gene to ID mapping file', type = str)
 	parser.add_argument('-cell2id', help = 'Cell to ID mapping file', type = str)
-	parser.add_argument('-genotype_hiddens', help = 'Mapping for the number of neurons in each term in genotype parts', type = int, default = 6)
+	parser.add_argument('-genotype_hiddens', help = 'Mapping for the number of neurons in each term in genotype parts', type = int, default = 4)
 	parser.add_argument('-mutations', help = 'Mutation information for cell lines', type = str)
 	parser.add_argument('-cn_deletions', help = 'Copy number deletions for cell lines', type = str)
 	parser.add_argument('-cn_amplifications', help = 'Copy number amplifications for cell lines', type = str)
@@ -30,7 +30,7 @@ def main():
 	parser.add_argument('-zscore_method', help='zscore method (zscore/robustz)', type=str, default = 'auc')
 	parser.add_argument('-std', help = 'Standardization File', type = str, default = 'MODEL/std.txt')
 	parser.add_argument('-patience', help = 'Early stopping epoch limit', type = int, default = 20)
-	parser.add_argument('-delta', help = 'Minimum change in loss to be considered an improvement', type = float, default = 0.1)
+	parser.add_argument('-delta', help = 'Minimum change in loss to be considered an improvement', type = float, default = 0.002)
 	parser.add_argument('-min_dropout_layer', help = 'Start dropout from this Layer number', type = int, default = 2)
 	parser.add_argument('-dropout_fraction', help = 'Dropout Fraction', type = float, default = 0.3)
 
