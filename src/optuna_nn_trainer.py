@@ -25,18 +25,18 @@ class OptunaNNTrainer():
 
 	def exec_study(self):
 		study = optuna.create_study(direction="maximize")
-		study.optimize(self.train_model, n_trials=25)
+		study.optimize(self.train_model, n_trials=15)
 		return self.print_result(study)
 
 
 	def setup_trials(self, trial):
 
-		self.data_wrapper.genotype_hiddens = trial.suggest_categorical("genotype_hiddens", [2, 4, 6])
-		self.data_wrapper.lr = trial.suggest_float("lr", 1e-4, 1e-3, log=True)
+		self.data_wrapper.genotype_hiddens = trial.suggest_categorical("genotype_hiddens", [2, 4])
+		self.data_wrapper.lr = trial.suggest_float("lr", 1e-4, 8e-4, log=True)
 
 		batch_size = self.data_wrapper.batchsize
 		if batch_size > len(self.train_feature)/4:
-			batch_size = int(math.log(len(self.train_feature)/4, 2))
+			batch_size = 2 ** int(math.log(len(self.train_feature)/4, 2))
 			self.data_wrapper.batchsize = trial.suggest_categorical("batchsize", [batch_size])
 
 		for key, value in trial.params.items():
@@ -137,8 +137,6 @@ class OptunaNNTrainer():
 					loss = nn.MSELoss()
 					if name == 'final':
 						val_loss += loss(output, cuda_labels)
-					else:
-						val_loss += self.data_wrapper.alpha * loss(output, cuda_labels)
 
 			val_corr = util.pearson_corr(val_predict, val_label_gpu)
 

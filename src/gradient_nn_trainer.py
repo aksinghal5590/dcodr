@@ -108,8 +108,6 @@ class GradientNNTrainer(NNTrainer):
 					loss = nn.MSELoss()
 					if name == 'final':
 						val_loss += loss(output, cuda_labels)
-					else:
-						val_loss += self.data_wrapper.alpha * loss(output, cuda_labels)
 
 			val_corr = util.pearson_corr(val_predict, val_label_gpu)
 

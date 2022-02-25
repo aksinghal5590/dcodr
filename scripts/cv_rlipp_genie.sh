@@ -18,13 +18,11 @@ hidden="${modeldir}/hidden_genie"
 
 cpu_count=$7
 
-feature_count=3
-
 genotype_hiddens=`grep "genotype_hiddens" "${modeldir}/train.log" | tail -1`
 readarray -d : -t str <<< "$genotype_hiddens"
 neurons=`echo "${str[1]}" | xargs`
 
 python -u ${homedir}/src/rlipp_helper.py -hidden $hidden -ontology $ontology \
-	-gene2idfile $gene2idfile -cell2idfile $cell2idfile -output $output -feature_count $feature_count \
+	-gene2idfile $gene2idfile -cell2idfile $cell2idfile -output $output -test $test \
 	-mutations $mutationfile -cn_deletions $cn_deletionfile -cn_amplifications $cn_amplificationfile \
-	-test $test -predicted $predicted -cpu_count $cpu_count -drug_count 0 -genotype_hiddens $neurons > "${modeldir}/rlipp.log"
+	-predicted $predicted -cpu_count $cpu_count -drug_count 0 -genotype_hiddens $neurons > "${modeldir}/rlipp.log"

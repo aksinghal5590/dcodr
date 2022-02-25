@@ -26,7 +26,6 @@ class RLIPPCalculator():
 		self.out_file = args.output
 		self.cpu_count = args.cpu_count
 		self.num_hiddens_genotype = args.genotype_hiddens
-		self.feature_count = args.feature_count
 
 		self.hidden_dir = args.hidden
 		if not self.hidden_dir.endswith('/'):
@@ -88,7 +87,7 @@ class RLIPPCalculator():
 
 
 	def load_gene_features(self, gene):
-		return self.load_feature(gene, self.feature_count)
+		return self.load_feature(gene, 1)
 
 
 	def create_child_feature_map(self, feature_map, term):
