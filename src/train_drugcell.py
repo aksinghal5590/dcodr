@@ -29,7 +29,7 @@ def main():
 	parser.add_argument('-optimize', help = 'Hyper-parameter optimization', type = int, default = 1)
 	parser.add_argument('-zscore_method', help='zscore method (zscore/robustz)', type=str, default = 'auc')
 	parser.add_argument('-std', help = 'Standardization File', type = str, default = 'MODEL/std.txt')
-	parser.add_argument('-patience', help = 'Early stopping epoch limit', type = int, default = 20)
+	parser.add_argument('-patience', help = 'Early stopping epoch limit', type = int, default = 30)
 	parser.add_argument('-delta', help = 'Minimum change in loss to be considered an improvement', type = float, default = 0.002)
 	parser.add_argument('-min_dropout_layer', help = 'Start dropout from this Layer number', type = int, default = 2)
 	parser.add_argument('-dropout_fraction', help = 'Dropout Fraction', type = float, default = 0.3)
