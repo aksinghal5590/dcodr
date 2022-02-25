@@ -32,7 +32,7 @@ class OptunaNNTrainer():
 	def setup_trials(self, trial):
 
 		self.data_wrapper.genotype_hiddens = trial.suggest_categorical("genotype_hiddens", [2, 4])
-		self.data_wrapper.lr = trial.suggest_float("lr", 1e-4, 8e-4, log=True)
+		self.data_wrapper.lr = trial.suggest_float("lr", 1e-4, 1e-3, log=True)
 
 		batch_size = self.data_wrapper.batchsize
 		if batch_size > len(self.train_feature)/4:
