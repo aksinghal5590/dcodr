@@ -7,7 +7,7 @@ cell2idfile="${homedir}/data/GENIE/cell2ind.txt"
 mutationfile="${homedir}/data/GENIE/cell2mutation.txt"
 cn_deletionfile="${homedir}/data/GENIE/cell2cndeletion.txt"
 cn_amplificationfile="${homedir}/data/GENIE/cell2cnamplification.txt"
-testdatafile="${homedir}/data/GENIE/test_${4}.txt"
+test="${homedir}/data/GENIE/test_${4}.txt"
 
 modeldir="${homedir}/models/model_${2}_${3}_${4}_${5}_${6}"
 
