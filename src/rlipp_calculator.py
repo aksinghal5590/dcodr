@@ -36,24 +36,6 @@ class RLIPPCalculator():
 		if self.drug_count == 0:
 			self.drug_count = len(self.drugs)
 
-		# Not needed if multiple features
-		# self.create_gene_hidden_files(args)
-
-
-	# Create hidden files for all genes which are just their mutation values
-	def create_gene_hidden_files(self, args):
-		mutations = np.genfromtxt(args.mutations, delimiter = ',')
-		cn_deletions = np.genfromtxt(args.cn_deletions, delimiter = ',')
-		cn_amplifications = np.genfromtxt(args.cn_amplifications, delimiter = ',')
-		cell_features = np.dstack([mutations, cn_deletions, cn_amplifications])
-
-		cell_id_map = dict(zip(self.cell_index['C'], self.cell_index['I']))
-		cell_line_ids = np.array([cell_id_map[x] for x in self.test_df['C'].tolist()])
-		for i, gene in enumerate(self.genes):
-			file_name = self.hidden_dir + gene + '.hidden'
-			gene_hiddens = cell_features[cell_line_ids, i]
-			np.savetxt(file_name, gene_hiddens, fmt='%.3f')
-
 
 	#Create a map of a list of the position of a drug in the test file
 	def create_drug_pos_map(self):

@@ -3,18 +3,15 @@
 homedir=$1
 ontology="${homedir}/data/training_files_av/ontology_${2}_${3}.txt"
 gene2idfile="${homedir}/data/training_files_av/gene2ind_${2}_${3}.txt"
-cell2idfile="${homedir}/data/GENIE/cell2ind.txt"
-mutationfile="${homedir}/data/GENIE/cell2mutation.txt"
-cn_deletionfile="${homedir}/data/GENIE/cell2cndeletion.txt"
-cn_amplificationfile="${homedir}/data/GENIE/cell2cnamplification.txt"
-test="${homedir}/data/GENIE/test_${4}.txt"
+cell2idfile="${homedir}/data/GENIE/cell2ind_428.txt"
+test="${homedir}/data/GENIE/test_428_${4}.txt"
 
 modeldir="${homedir}/models/model_${2}_${3}_${4}_${5}_${6}"
 
-predicted="${modeldir}/predict_genie.txt"
-output="${modeldir}/rlipp_genie.out"
+predicted="${modeldir}/predict_genie_428.txt"
+output="${modeldir}/rlipp_genie_428.out"
 
-hidden="${modeldir}/hidden_genie"
+hidden="${modeldir}/hidden_genie_428"
 
 cpu_count=$7
 
@@ -24,5 +21,4 @@ neurons=`echo "${str[1]}" | xargs`
 
 python -u ${homedir}/src/rlipp_helper.py -hidden $hidden -ontology $ontology \
 	-gene2idfile $gene2idfile -cell2idfile $cell2idfile -output $output -test $test \
-	-mutations $mutationfile -cn_deletions $cn_deletionfile -cn_amplifications $cn_amplificationfile \
 	-predicted $predicted -cpu_count $cpu_count -drug_count 0 -genotype_hiddens $neurons > "${modeldir}/rlipp.log"

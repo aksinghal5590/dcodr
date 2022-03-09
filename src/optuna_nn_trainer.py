@@ -24,7 +24,11 @@ class OptunaNNTrainer():
 
 
 	def exec_study(self):
-		study = optuna.create_study(direction="maximize")
+		search_space = {
+			"genotype_hiddens": [2, 4],
+			"lr": [1e-4, 1.2e-4, 1.5e-4, 1.8e-4, 2e-4, 3e-4, 4e-4, 5e-4]
+		}
+		study = optuna.create_study(sampler=GridSampler(search_space), direction="maximize")
 		study.optimize(self.train_model, n_trials=15)
 		return self.print_result(study)
 
@@ -32,7 +36,7 @@ class OptunaNNTrainer():
 	def setup_trials(self, trial):
 
 		self.data_wrapper.genotype_hiddens = trial.suggest_categorical("genotype_hiddens", [2, 4])
-		self.data_wrapper.lr = trial.suggest_float("lr", 1e-4, 1e-3, log=True)
+		self.data_wrapper.lr = trial.suggest_float("lr", 1e-4, 6e-4, log=True)
 
 		batch_size = self.data_wrapper.batchsize
 		if batch_size > len(self.train_feature)/4:
@@ -163,6 +167,7 @@ class OptunaNNTrainer():
 		if trial.should_prune():
 			raise optuna.exceptions.TrialPruned()
 
+		torch.save(self.model, self.data_wrapper.modeldir + '/model_trial_' + str(trial.number) + '.pt')
 		return max_corr
 
 
