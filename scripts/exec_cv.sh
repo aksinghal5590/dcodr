@@ -10,7 +10,7 @@ drugs=`awk '{ print $1 }' "${homedir}/data/training_files_av/drugname_${dataset}
 
 for ont in "ctg"
 do
-    for drug in "Palbociclib"
+    for drug in $drugs
 	do
 		for ((i=1;i<=folds;i++));
 		do
