@@ -12,16 +12,16 @@ from optuna.trial import TrialState
 from optuna.samplers import GridSampler
 
 import util
+from nn_trainer import *
 from training_data_wrapper import *
 from drugcell_nn import *
 
 
-class OptunaNNTrainer():
+class OptunaNNTrainer(NNTrainer):
 
-	def __init__(self, opt):
-		self.data_wrapper = TrainingDataWrapper(opt)
-		self.train_feature, self.train_label, self.val_feature, self.val_label = self.data_wrapper.prepare_train_data()
-
+	def __init__(self, data_wrapper):
+		super().__init__(data_wrapper)
+		
 
 	def exec_study(self):
 		search_space = {
@@ -167,7 +167,7 @@ class OptunaNNTrainer():
 		if trial.should_prune():
 			raise optuna.exceptions.TrialPruned()
 
-		torch.save(self.model, self.data_wrapper.modeldir + '/model_trial_' + str(trial.number) + '.pt')
+		#torch.save(self.model, self.data_wrapper.modeldir + '/model_trial_' + str(trial.number) + '.pt')
 		return max_corr
 
 

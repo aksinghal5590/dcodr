@@ -8,7 +8,7 @@
 
 cpu_count=8
 
-bash "${1}/scripts/cv_rlipp.sh" $1 $2 $3 $4 $5 $6 $cpu_count
+bash "${1}/scripts/cv_rlipp.sh" $1 $2 $3 $4 $5 $6 $cpu_count $7
 if [ $4 = "Palbociclib" ]
 then
     bash "${1}/scripts/cv_rlipp_genie.sh" $1 $2 $3 $4 $5 $6 $cpu_count

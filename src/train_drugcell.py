@@ -35,19 +35,20 @@ def main():
 	parser.add_argument('-dropout_fraction', help = 'Dropout Fraction', type = float, default = 0.3)
 
 	opt = parser.parse_args()
+	data_wrapper = TrainingDataWrapper(opt)
 
 	if opt.optimize == 0:
-		NNTrainer(opt).train_model()
+		NNTrainer(data_wrapper).train_model()
 
 	elif opt.optimize == 1:
-		GradientNNTrainer(opt).train_model()
+		GradientNNTrainer(data_wrapper).train_model()
 
 	elif opt.optimize == 2:
-		trial_params = OptunaNNTrainer(opt).exec_study()
+		trial_params = OptunaNNTrainer(data_wrapper).exec_study()
 		for key, value in trial_params.items():
 			if hasattr(opt, key):
 				setattr(opt, key, value)
-		GradientNNTrainer(opt).train_model()
+		GradientNNTrainer(data_wrapper).train_model()
 
 	else:
 		print("Wrong value for optimize.")

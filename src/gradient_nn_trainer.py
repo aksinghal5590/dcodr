@@ -9,20 +9,22 @@ from torch.autograd import Variable
 import util
 from nn_trainer import *
 from training_data_wrapper import *
+from drugcell_nn import *
 
 
 class GradientNNTrainer(NNTrainer):
 
-	def __init__(self, opt):
-		super().__init__(opt)
+	def __init__(self, data_wrapper):
+		super().__init__(data_wrapper)
 
 
 	def train_model(self):
 
+		self.model = DrugCellNN(self.data_wrapper)
+		self.model.cuda(self.data_wrapper.cuda)
+
 		epoch_start_time = time.time()
 		min_loss = None
-
-		train_feature, train_label, val_feature, val_label = self.data_wrapper.prepare_train_data()
 
 		term_mask_map = util.create_term_mask(self.model.term_direct_gene_map, self.model.gene_dim, self.data_wrapper.cuda)
 		for name, param in self.model.named_parameters():
@@ -32,8 +34,8 @@ class GradientNNTrainer(NNTrainer):
 			else:
 				param.data = param.data * 0.1
 
-		train_loader = du.DataLoader(du.TensorDataset(train_feature, train_label), batch_size=self.data_wrapper.batchsize, shuffle=True, drop_last=True)
-		val_loader = du.DataLoader(du.TensorDataset(val_feature, val_label), batch_size=self.data_wrapper.batchsize, shuffle=True)
+		train_loader = du.DataLoader(du.TensorDataset(self.train_feature, self.train_label), batch_size=self.data_wrapper.batchsize, shuffle=True, drop_last=True)
+		val_loader = du.DataLoader(du.TensorDataset(self.val_feature, self.val_label), batch_size=self.data_wrapper.batchsize, shuffle=True)
 
 		optimizer = torch.optim.AdamW(self.model.parameters(), lr=self.data_wrapper.lr, betas=(0.9, 0.99), eps=1e-05, weight_decay=self.data_wrapper.lr)
 		optimizer.zero_grad()

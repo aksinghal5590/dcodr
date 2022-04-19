@@ -13,18 +13,21 @@ from drugcell_nn import *
 
 class NNTrainer():
 
-	def __init__(self, opt):
-		self.data_wrapper = TrainingDataWrapper(opt)
-		self.model = DrugCellNN(self.data_wrapper)
-		self.model.cuda(self.data_wrapper.cuda)
+	def __init__(self, data_wrapper):
+		self.data_wrapper = data_wrapper
+		self.train_feature = self.data_wrapper.train_feature
+		self.train_label = self.data_wrapper.train_label
+		self.val_feature = self.data_wrapper.val_feature
+		self.val_label = self.data_wrapper.val_label
 
 
 	def train_model(self):
 
+		self.model = DrugCellNN(self.data_wrapper)
+		self.model.cuda(self.data_wrapper.cuda)
+
 		epoch_start_time = time.time()
 		min_loss = None
-
-		train_feature, train_label, val_feature, val_label = self.data_wrapper.prepare_train_data()
 
 		term_mask_map = util.create_term_mask(self.model.term_direct_gene_map, self.model.gene_dim, self.data_wrapper.cuda)
 		for name, param in self.model.named_parameters():
@@ -34,8 +37,8 @@ class NNTrainer():
 			else:
 				param.data = param.data * 0.1
 
-		train_loader = du.DataLoader(du.TensorDataset(train_feature, train_label), batch_size=self.data_wrapper.batchsize, shuffle=True, drop_last=True)
-		val_loader = du.DataLoader(du.TensorDataset(val_feature, val_label), batch_size=self.data_wrapper.batchsize, shuffle=True)
+		train_loader = du.DataLoader(du.TensorDataset(self.train_feature, self.train_label), batch_size=self.data_wrapper.batchsize, shuffle=True, drop_last=True)
+		val_loader = du.DataLoader(du.TensorDataset(self.val_feature, self.val_label), batch_size=self.data_wrapper.batchsize, shuffle=True)
 
 		optimizer = torch.optim.AdamW(self.model.parameters(), lr=self.data_wrapper.lr, betas=(0.9, 0.99), eps=1e-05, weight_decay=self.data_wrapper.lr)
 		optimizer.zero_grad()

@@ -10,7 +10,7 @@ cn_deletionfile="${homedir}/data/training_files_av/cell2cndeletion_${2}_${3}.txt
 cn_amplificationfile="${homedir}/data/training_files_av/cell2cnamplification_${2}_${3}.txt"
 traindatafile="${homedir}/data/training_files_av/${6}_train_${3}_${4}.txt"
 
-modeldir="${homedir}/models/CNV/model_${2}_${3}_${4}_${5}_${6}"
+modeldir="${homedir}/models/nested_CV/model_${2}_${3}_${4}_${5}_${7}"
 if [ -d $modeldir ]
 then
 	rm -rf $modeldir

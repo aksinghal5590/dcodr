@@ -5,8 +5,8 @@
 #SBATCH --mem=32G
 #SBATCH --dependency=singleton
 
-bash "${1}/scripts/cv_train.sh" $1 $2 $3 $4 $5 $6
-bash "${1}/scripts/cv_test.sh" $1 $2 $3 $4 $5 $6
+bash "${1}/scripts/cv_train.sh" $1 $2 $3 $4 $5 $6 $7
+bash "${1}/scripts/cv_test.sh" $1 $2 $3 $4 $5 $6 $7
 if [ $4 = "Palbociclib" ]
 then
     bash "${1}/scripts/cv_test_genie.sh" $1 $2 $3 $4 $5 $6

@@ -33,8 +33,9 @@ class TrainingDataWrapper():
 		self.mutations = np.genfromtxt(args.mutations, delimiter = ',')
 		self.cn_deletions = np.genfromtxt(args.cn_deletions, delimiter = ',')
 		self.cn_amplifications = np.genfromtxt(args.cn_amplifications, delimiter = ',')
-		self.cell_features = np.dstack([self.cn_deletions, self.cn_amplifications])
-		#self.cell_features = np.dstack([self.mutations, self.cn_deletions, self.cn_amplifications])
+		self.cell_features = np.dstack([self.mutations, self.cn_deletions, self.cn_amplifications])
+
+		self.train_feature, self.train_label, self.val_feature, self.val_label = self.prepare_train_data()
 
 
 	def prepare_train_data(self):
