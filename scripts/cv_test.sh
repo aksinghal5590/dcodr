@@ -9,7 +9,7 @@ cn_deletionfile="${homedir}/data/training_files_av/cell2cndeletion_${2}_${3}.txt
 cn_amplificationfile="${homedir}/data/training_files_av/cell2cnamplification_${2}_${3}.txt"
 testdatafile="${homedir}/data/training_files_av/${6}_test_${3}_${4}.txt"
 
-modeldir="${homedir}/models/nested_CV/model_${2}_${3}_${4}_${5}_${7}"
+modeldir="${homedir}/models/attention/model_${2}_${3}_${4}_${5}_${7}"
 modelfile="${modeldir}/model_final.pt"
 
 stdfile="${modeldir}/std.txt"

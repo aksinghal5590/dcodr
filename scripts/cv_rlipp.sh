@@ -6,7 +6,7 @@ gene2idfile="${homedir}/data/training_files_av/gene2ind_${2}_${3}.txt"
 cell2idfile="${homedir}/data/training_files_av/cell2ind_${3}.txt"
 test="${homedir}/data/training_files_av/${6}_test_${3}_${4}.txt"
 
-modeldir="${homedir}/models/nested_CV/model_${2}_${3}_${4}_${5}_${8}"
+modeldir="${homedir}/models/attention/model_${2}_${3}_${4}_${5}_${8}"
 
 predicted="${modeldir}/predict.txt"
 sys_output="${modeldir}/rlipp.out"

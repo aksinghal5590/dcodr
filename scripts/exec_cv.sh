@@ -5,7 +5,7 @@ homedir="/cellar/users/asinghal/Workspace/dcodr"
 dataset="av"
 zscore_method="auc"
 folds=5
-nested_folds=5
+nested_folds=1
 
 drugs=`awk '{ print $1 }' "${homedir}/data/training_files_av/drugname_${dataset}.txt"`
 

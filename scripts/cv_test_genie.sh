@@ -9,7 +9,7 @@ cn_deletionfile="${homedir}/data/GENIE/cell2cndeletion_428.txt"
 cn_amplificationfile="${homedir}/data/GENIE/cell2cnamplification_428.txt"
 testdatafile="${homedir}/data/GENIE/test_428_${4}.txt"
 
-modeldir="${homedir}/models/nested_CV/model_${2}_${3}_${4}_${5}_${6}"
+modeldir="${homedir}/models/attention/model_${2}_${3}_${4}_${5}_${6}"
 modelfile="${modeldir}/model_final.pt"
 
 stdfile="${modeldir}/std.txt"
