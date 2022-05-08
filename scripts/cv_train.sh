@@ -10,7 +10,10 @@ cn_deletionfile="${homedir}/data/training_files_av/cell2cndeletion_${2}_${3}.txt
 cn_amplificationfile="${homedir}/data/training_files_av/cell2cnamplification_${2}_${3}.txt"
 traindatafile="${homedir}/data/training_files_av/${6}_train_${3}_${4}.txt"
 
-modeldir="${homedir}/models/attention/model_${2}_${3}_${4}_${5}_${7}"
+i=$6
+j=$7
+nf=$(( i + 5*(j-1) ))
+modeldir="${homedir}/models/model_${2}_${3}_${4}_${5}_${nf}"
 if [ -d $modeldir ]
 then
 	rm -rf $modeldir
@@ -28,8 +31,8 @@ source activate cuda11_env
 
 python -u $pyScript -onto $ontfile -gene2id $gene2idfile -cell2id $cell2idfile -train $traindatafile \
 	-mutations $mutationfile -cn_deletions $cn_deletionfile -cn_amplifications $cn_amplificationfile \
-	-std $stdfile -model $modeldir -genotype_hiddens 4 -lr 0.00015 -cuda $cudaid -epoch 300 \
-	-batchsize 64 -optimize 2 -zscore_method $zscore_method > "${modeldir}/train.log"
+	-std $stdfile -model $modeldir -genotype_hiddens 4 -lr 0.0002 -cuda $cudaid -epoch 200 \
+	-batchsize 64 -optimize 1 -zscore_method $zscore_method > "${modeldir}/train.log"
 
 qcscript="${homedir}/src/qc_plots.py"
 

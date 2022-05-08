@@ -6,7 +6,7 @@ gene2idfile="${homedir}/data/training_files_av/gene2ind_${2}_${3}.txt"
 cell2idfile="${homedir}/data/GENIE/cell2ind_428.txt"
 test="${homedir}/data/GENIE/test_428_${4}.txt"
 
-modeldir="${homedir}/models/attention/model_${2}_${3}_${4}_${5}_${6}"
+modeldir="${homedir}/models/model_${2}_${3}_${4}_${5}_${6}"
 
 predicted="${modeldir}/predict_genie_428.txt"
 sys_output="${modeldir}/rlipp_genie_428.out"

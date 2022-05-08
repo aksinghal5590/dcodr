@@ -11,3 +11,5 @@ if [ $4 = "Palbociclib" ]
 then
     bash "${1}/scripts/cv_test_genie.sh" $1 $2 $3 $4 $5 $6
 fi
+
+#bash "${1}/scripts/cv_test_shuffled_input.sh" $1 $2 $3 $4 $5 $6 $7

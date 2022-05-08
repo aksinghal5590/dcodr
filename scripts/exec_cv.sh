@@ -15,11 +15,10 @@ do
 	do
 		for ((i=1;i<=folds;i++));
 		do
-			for ((j=0;j<nested_folds;j++));
+			for ((j=1;j<=nested_folds;j++));
 			do
-				nf=$(( 5*j + i ))
-				sbatch -J "DCoDR_${ont}_${drug}_${nf}" -o "${homedir}/logs/out_${ont}_${drug}_${nf}.log" ${homedir}/scripts/cv_batch.sh $homedir $ont $dataset $drug ${zscore_method} $i $nf
-				sbatch -J "DCoDR_${ont}_${drug}_${nf}" -o "${homedir}/logs/rlipp_${ont}_${drug}_${nf}.log" ${homedir}/scripts/cv_rlipp_slurm.sh $homedir $ont $dataset $drug ${zscore_method} $i $nf
+				sbatch -J "DCoDR_${ont}_${drug}_${j}" -o "${homedir}/logs/out_${ont}_${drug}_${j}.log" ${homedir}/scripts/cv_batch.sh $homedir $ont $dataset $drug ${zscore_method} $i $j
+				sbatch -J "DCoDR_${ont}_${drug}_${j}" -o "${homedir}/logs/rlipp_${ont}_${drug}_${j}.log" ${homedir}/scripts/cv_rlipp_slurm.sh $homedir $ont $dataset $drug ${zscore_method} $i $j
 			done
 		done
 	done

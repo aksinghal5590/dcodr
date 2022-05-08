@@ -133,7 +133,7 @@ class RLIPPCalculator():
 		p_rho, p_pval = self.exec_lm(X_parent, y)
 		c_rho, c_pval = self.exec_lm(X_child, y)
 		rlipp = p_rho/c_rho
-		result = '{}\t{:.3f}\t{:.3e}\t{:.3f}\t{:.3e}\t{:.3f}\n'.format(term, p_rho, p_pval, c_rho, c_pval, rlipp)
+		result = '{}\t{:.3e}\t{:.3e}\t{:.3e}\t{:.3e}\t{:.3e}\n'.format(term, p_rho, p_pval, c_rho, c_pval, rlipp)
 		return result
 
 
@@ -142,7 +142,7 @@ class RLIPPCalculator():
 		pred = np.take(self.predicted_vals, position_map)
 		gene_embeddings = np.take(gene_features, position_map)
 		rho, p_val = stats.spearmanr(pred, gene_embeddings)
-		result = '{}\t{:.3f}\t{:.3e}\n'.format(gene, rho, p_val)
+		result = '{}\t{:.3e}\t{:.3e}\n'.format(gene, rho, p_val)
 		return result
 
 
@@ -171,7 +171,7 @@ class RLIPPCalculator():
 				for result in rlipp_results:
 					rlipp_file.write(result)
 
-				gene_rho_results = parallel(delayed(self.calc_gene_rho)(feature_map[gene], drug_pos_map[drug], gene, drug) for gene in self.gene)
+				gene_rho_results = parallel(delayed(self.calc_gene_rho)(feature_map[gene], drug_pos_map[drug], gene, drug) for gene in self.genes)
 				for result in gene_rho_results:
 					gene_rho_file.write(result)
 
