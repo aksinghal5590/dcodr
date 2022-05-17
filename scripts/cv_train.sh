@@ -31,8 +31,8 @@ source activate cuda11_env
 
 python -u $pyScript -onto $ontfile -gene2id $gene2idfile -cell2id $cell2idfile -train $traindatafile \
 	-mutations $mutationfile -cn_deletions $cn_deletionfile -cn_amplifications $cn_amplificationfile \
-	-std $stdfile -model $modeldir -genotype_hiddens 4 -lr 0.0002 -cuda $cudaid -epoch 200 \
-	-batchsize 64 -optimize 1 -zscore_method $zscore_method > "${modeldir}/train.log"
+	-std $stdfile -model $modeldir -genotype_hiddens 4 -lr 0.0002 -cuda $cudaid -epoch 300 \
+	-batchsize 64 -optimize 2 -zscore_method $zscore_method > "${modeldir}/train.log"
 
 qcscript="${homedir}/src/qc_plots.py"
 
