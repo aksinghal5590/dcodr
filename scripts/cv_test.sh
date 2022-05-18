@@ -12,7 +12,7 @@ testdatafile="${homedir}/data/training_files_av/${6}_test_${3}_${4}.txt"
 i=$6
 j=$7
 nf=$(( i + 5*(j-1) ))
-modeldir="${homedir}/models/mbb/model_${2}_${3}_${4}_${5}_${nf}"
+modeldir="${homedir}/models/model_${2}_${3}_${4}_${5}_${nf}"
 modelfile="${modeldir}/model_final.pt"
 
 stdfile="${modeldir}/std.txt"
