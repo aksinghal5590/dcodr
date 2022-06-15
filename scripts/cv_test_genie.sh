@@ -2,7 +2,7 @@
 homedir=$1
 zscore_method=$5
 
-gene2idfile="${homedir}/data/training_files_av/gene2ind_${2}_${3}.txt"
+gene2idfile="${homedir}/data/training_files_${3}/gene2ind_${2}_${3}.txt"
 cell2idfile="${homedir}/data/GENIE/cell2ind_428.txt"
 mutationfile="${homedir}/data/GENIE/cell2mutation_428.txt"
 cn_deletionfile="${homedir}/data/GENIE/cell2cndeletion_428.txt"

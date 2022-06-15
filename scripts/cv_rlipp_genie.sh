@@ -1,8 +1,8 @@
 #!/bin/bash
 
 homedir=$1
-ontology="${homedir}/data/training_files_av/ontology_${2}_${3}.txt"
-gene2idfile="${homedir}/data/training_files_av/gene2ind_${2}_${3}.txt"
+ontology="${homedir}/data/training_files_${3}/ontology_${2}_${3}.txt"
+gene2idfile="${homedir}/data/training_files_${3}/gene2ind_${2}_${3}.txt"
 cell2idfile="${homedir}/data/GENIE/cell2ind_428.txt"
 test="${homedir}/data/GENIE/test_428_${4}.txt"
 
